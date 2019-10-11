@@ -1,0 +1,1 @@
+堆malloc之后完成初始化，可以用pwngdb bins命令获取详情
