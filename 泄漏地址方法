@@ -1,0 +1,14 @@
+1.读入（read）程序存在问题，未在结尾加上'\0',打印时可能把之后的内容都打印出来。（技巧，free两个不会合并的chunck，重新分配获得其一个chunck，并打印其bk指针，该
+指针指向第二个chunk，这样就泄漏了堆地址，根据第二个chunk地址的偏移可以得出堆的映射地址）（技巧2，free的第二个chunck的bk指向areana的内部地址，该地址的偏移是
+固定的，通过偏移可以获取areana加载的地址，libc加载的地址）
+
+2.通过缓冲区溢出漏洞修改chunck的size，使得两个chunck重叠，free其中一个chunck，该chunck中就有了堆的地址，打印另一个chunck，就会把该地址打印出来。一般free
+size小的chunck，打印size大的chunck。（技巧，unsorted bin中的chunck的fd指向unsorted bin链表的头部，这个地址在libc中，可以用来计算加载libc的地址）
+
+3.通过UAF，使得两个不同结构的数据分配在同一个chunck里，其中一个chunck可以修改另一个chunck的内容，将内容修改为要泄漏的地址，当display另一个chunck时，就能
+泄漏地址
+
+4.通过申请很大的一块内存，将原来的top chunk，即old top chunck放到unsorted bin中，新的top chunck重新分配，这样再申请一个unsorted bin的内存，就可以获取old
+top chunck 内残留的内存信息，泄漏出heap地址
+
+5.当没有print/display等类似函数的时候，可以通过漏洞修改GOT表，将free修改为put，从而打印想要获取的地址
