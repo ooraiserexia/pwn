@@ -10,6 +10,7 @@
 【5】FORTIFY：FORTIFY_SOURCE机制对格式化字符串有两个限制(1)包含%n的格式化字符串不能位于程序内存中的可写地址。(2)当使用位置参数时，必须使用范围内的所有参数。所以如果要使用%7$x，你必须同时使用1,2,3,4,5和6。
 
 5.unlink方式可以使得一个全局变量可以被控制，unlink可以利用向前合并，也可以利用向后合并，通过unlink造成内存写可以修改got表获取shell
+unlink有向前unlink和向后unlink两种，条件是chunck大小大于80，相邻前一个chunk使用中（prev_inuse is set），下一个chunck为free（下下一个chunck的prev_inuse is clear），
 6.覆盖printf@got，free@got，等指向的内存，从而获得system执行的shell
 7.SROP伪造栈获得shell，看到特征syscall;ret可以考虑SROP
 8.让指向可以被edit内存的指针被覆盖为我们想要控制的指针（比如GOT地址），然后再edit该内存可以获得shell
