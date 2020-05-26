@@ -1,0 +1,4 @@
+1.使用gdb.debug函数，可以从程序引导开始就进行调试
+2.使用context.terminal = ['gnome-terminal', '-x', 'sh', '-c']
+context.terminal = ['gnome-terminal', '-x', '/bin/bash', '-c']可以设置新开窗口调试
+sendline和recvline可以发送以及接受换行符
